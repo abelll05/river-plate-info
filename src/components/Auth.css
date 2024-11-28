@@ -1,0 +1,175 @@
+/* Auth.css */
+
+/* Contenedor principal */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('../assets/monumental.jpg'); /* Después */
+    background-size: cover; /* Hace que la imagen cubra toda el área */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+  }
+  
+  /* Estilo para el cuadro que contiene el formulario */
+  .auth-box {
+    background-color: rgba(45, 45, 45, 0.8); /* Fondo oscuro semi-transparente */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 350px;
+    text-align: center;
+  }
+  
+  /* Título del formulario */
+  .auth-title {
+    color: #fff;
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+  
+  /* Formulario */
+  .auth-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Estilos para cada grupo de entrada (campo de texto) */
+  .auth-input-group {
+    margin-bottom: 20px;
+  }
+  
+  .auth-input-group label {
+    color: #fff;
+    font-size: 1rem;
+    margin-bottom: 5px;
+  }
+  
+  .auth-input-group input {
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+  }
+  
+  /* Estilo cuando el input está enfocado */
+  .auth-input-group input:focus {
+    outline: none;
+    border-color: #e63946;
+  }
+  
+  /* Estilo para el mensaje de error */
+  .auth-error {
+    color: red;
+    font-size: 0.9rem;
+  }
+  
+  /* Estilos para los botones */
+  .auth-button {
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+  
+  /* Estilo para el botón rojo (Iniciar sesión y Registrarse) */
+  .auth-button-red {
+    background-color: #e63946;
+    color: #fff;
+  }
+  
+  .auth-button-red:hover {
+    background-color: #d32f2f;
+  }
+  
+  /* Estilo para el pie de página con los enlaces */
+  .auth-footer {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #fff;
+  }
+  
+  .auth-footer a {
+    color: #e63946;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  
+  .auth-footer a:hover {
+    text-decoration: underline;
+  }
+  
+  .auth-link-red {
+    color: #e63946;
+  }
+  
+  /* Estilo para la imagen de fondo, asegurándose de que sea visible */
+  .auth-container img {
+    width: 100%;
+    height: auto;
+  }
+  
+  /* Estilos generales para pantallas grandes */
+body {
+    font-size: 16px;
+  }
+  
+  .navbar-menu {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  /* Para pantallas pequeñas, entre 320px y 768px */
+  @media screen and (max-width: 768px) {
+    .navbar-menu {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .navbar-logo {
+      font-size: 1.5rem;
+    }
+  
+    .navbar-link {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+  
+    .news-grid {
+      grid-template-columns: 1fr; /* Una sola columna para noticias */
+    }
+  }
+  
+  /* Para pantallas medianas, entre 768px y 1024px */
+  @media screen and (min-width: 768px) and (max-width: 1024px) {
+    .news-grid {
+      grid-template-columns: repeat(2, 1fr); /* Dos columnas */
+    }
+  
+    .navbar-link {
+      font-size: 1.4rem;
+    }
+  }
+  
+  /* Para pantallas grandes, mayores a 1024px */
+  @media screen and (min-width: 1024px) {
+    .news-grid {
+      grid-template-columns: repeat(3, 1fr); /* Tres columnas */
+    }
+  
+    .navbar-link {
+      font-size: 1.6rem;
+    }
+  }
+  
+  /* Para pantallas muy grandes, hasta 2000px */
+  @media screen and (min-width: 1500px) {
+    .news-grid {
+      grid-template-columns: repeat(4, 1fr); /* Cuatro columnas */
+    }
+  }
+  

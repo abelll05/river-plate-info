@@ -1,0 +1,41 @@
+/* Estilos para el navbar con fondo rojo */
+.navbar {
+    background-color: #e60000; /* Rojo */
+    padding: 1rem;
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-logo {
+    font-size: 1.8rem;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.navbar-menu {
+    list-style: none;
+    display: flex;
+}
+
+.navbar-item {
+    margin-left: 20px;
+}
+
+.navbar-link {
+    color: white;
+    text-decoration: none;
+    font-size: 1.1rem; /* Aumentar el tamaño de la fuente */
+    text-transform: uppercase; /* Poner todo en mayúsculas */
+    font-weight: bold;
+    transition: color 0.3s; /* Agregar transición para color */
+}
+
+.navbar-link:hover {
+    color: #ffffff; /* Cambiar el color al pasar el cursor */
+    text-decoration: underline;
+}
