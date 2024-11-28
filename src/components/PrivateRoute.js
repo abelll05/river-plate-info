@@ -1,16 +1,18 @@
-// src/components/PrivateRoute.js
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 
+// Componente de ruta privada que protegerá las rutas donde se requiera autenticación
 const PrivateRoute = ({ children }) => {
-  const token = localStorage.getItem('token'); // O el estado que manejes
+  // Verifica si hay un token en el localStorage
+  const token = localStorage.getItem('token');
 
   if (!token) {
-    // Si no hay token, redirige a /login
+    // Si no hay token, redirige al login
     return <Navigate to="/login" />;
   }
 
-  return children; // Si hay token, renderiza los hijos (el contenido protegido)
+  // Si hay token, muestra el contenido de la ruta
+  return children;
 };
 
 export default PrivateRoute;

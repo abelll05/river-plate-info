@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // Importamos useNavigate
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import { Link } from "react-router-dom";
 import "./Auth.css"; // Importamos el archivo CSS
 

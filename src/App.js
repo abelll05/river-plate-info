@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode"; // Asegúrate de que esta importación esté correcta
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode";
 
 // Importa el Navbar con el color rojo
 import Navbar from "./components/Navbar"; // Este es el navbar con el fondo rojo
@@ -54,18 +54,21 @@ function App() {
       {/* Aquí solo deberías tener el Navbar con el fondo rojo */}
       <Navbar />
 
+      {/* Rutas dentro de <Routes> */}
       <Routes>
-        <Route
-          path="/"
-          element={token ? <Home /> : <Login setToken={handleLogin} />} // Si hay token, mostrar Home, sino Login
-        />
+        {/* Rutas públicas */}
+        <Route path="/" element={token ? <Home /> : <Login setToken={handleLogin} />} />
+        <Route path="/login" element={<Login setToken={handleLogin} />} />
+        <Route path="/register" element={<Register />} />
+
+        {/* Rutas protegidas */}
         <Route
           path="/history"
           element={
             <PrivateRoute>
               <History />
             </PrivateRoute>
-          } // Proteger la ruta History
+          }
         />
         <Route
           path="/team"
@@ -73,18 +76,16 @@ function App() {
             <PrivateRoute>
               <Team />
             </PrivateRoute>
-          } // Proteger la ruta Team
+          }
         />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login setToken={handleLogin} />} /> {/* Redirige a login */}
 
         {/* Ruta de Logout */}
-        <Route path="/logout" element={<Logout />} /> {/* Aquí se maneja el logout */}
+        <Route path="/logout" element={<Logout />} />
 
-        {/* Nuevas rutas agregadas */}
-        <Route path="/socios" element={<Socios />} /> {/* Ruta de Socios */}
-        <Route path="/accesos-estadio" element={<Estadio />} /> {/* Ruta de Accesos al Estadio */}
-        <Route path="/redes" element={<Redes />} /> {/* Ruta de Redes */}
+        {/* Nuevas rutas */}
+        <Route path="/socios" element={<Socios />} />
+        <Route path="/accesos-estadio" element={<Estadio />} />
+        <Route path="/redes" element={<Redes />} />
       </Routes>
     </div>
   );
