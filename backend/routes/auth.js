@@ -9,6 +9,11 @@ const router = express.Router();
 router.post("/register", async (req, res) => {
   const { username, email, password } = req.body;
 
+  // Validación de los datos
+  if (!email || !password) {
+    return res.status(400).json({ message: "Por favor ingresa un correo y una contraseña" });
+  }
+
   try {
     // Verificar si el usuario ya existe
     const existingUser = await User.findOne({ email });
@@ -17,8 +22,7 @@ router.post("/register", async (req, res) => {
     }
 
     // Hashear la contraseña antes de guardarla
-    const hashedPassword = await bcrypt.hash(password, 10);
-    console.log("Contraseña cifrada:", hashedPassword);  // Verifica que la contraseña se cifra correctamente
+    const hashedPassword = await bcrypt.hash(password, 12); // Se ha aumentado el número de rondas
 
     // Crear un nuevo usuario
     const newUser = new User({
@@ -40,6 +44,11 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
+  // Validación de los datos
+  if (!email || !password) {
+    return res.status(400).json({ message: "Por favor ingresa un correo y una contraseña" });
+  }
+
   try {
     // Verificar si el usuario existe
     const user = await User.findOne({ email });
@@ -49,7 +58,7 @@ router.post("/login", async (req, res) => {
 
     // Verificar la contraseña ingresada comparándola con la almacenada (cifrada)
     const isMatch = await bcrypt.compare(password, user.password);
-    console.log("¿Contraseña correcta?", isMatch);  // Imprime si la contraseña coincide o no
+    console.log("¿Contraseña correcta?", isMatch);
 
     if (!isMatch) {
       return res.status(400).json({ message: "Contraseña incorrecta" });
@@ -62,11 +71,11 @@ router.post("/login", async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true, // No accesible desde JS
       secure: process.env.NODE_ENV === "production", // Solo en HTTPS en producción
-      sameSite: "None", // Permitir solicitudes CORS
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // SameSite=None solo en producción
       maxAge: 3600000, // 1 hora de expiración
     });
 
-    res.json({ message: "Autenticación exitosa" });
+    res.json({ message: "Autenticación exitosa", token }); // Enviar el token en la respuesta
   } catch (error) {
     res.status(500).json({ message: "Error al iniciar sesión", error: error.message });
   }

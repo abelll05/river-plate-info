@@ -17,19 +17,23 @@ connectDB();
 const app = express();
 const port = process.env.PORT || 5000;
 
+// Configuración de CORS para permitir solicitudes desde el frontend
+const corsOptions = {
+  origin: process.env.FRONTEND_URL || "http://localhost:3000", // Cambia esto si usas otro puerto o dominio
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  allowedHeaders: "Content-Type,Authorization", // Asegúrate de permitir los encabezados necesarios
+  credentials: true, // Esto es necesario para enviar cookies (token en la cookie)
+};
+
+app.use(cors(corsOptions)); // Usamos corsOptions aquí
+
 // Middlewares
 app.use(express.json()); // Parsear JSON en el cuerpo de las solicitudes
 app.use(cookieParser()); // Manejo de cookies
-
-// Configuración de CORS para permitir solicitudes desde el frontend
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000", // Cambia esto según tu entorno de frontend
-    credentials: true, // Permitir el envío de cookies en solicitudes cruzadas
-  })
-);
-
 app.use(morgan("dev")); // Registrar las solicitudes en consola (útil para desarrollo)
+
+// Conexión a la base de datos (verifica que la conexión esté bien configurada)
+connectDB();
 
 // Rutas de autenticación
 app.use("/api/auth", authRoutes); // Ruta para el registro y login de usuarios

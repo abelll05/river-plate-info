@@ -13,18 +13,26 @@ const Register = ({ setToken }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/auth/register", {
-        username,
-        email,
-        password,
-      });
+      await axios.post(
+        "http://localhost:5000/api/auth/register", 
+        {
+          username,
+          email,
+          password,
+        },
+        { withCredentials: true } // Aseguramos que las cookies se envíen en la solicitud
+      );
       alert("Registro exitoso");
 
       // Después del registro, hacemos login automáticamente
-      const loginResponse = await axios.post("http://localhost:5000/api/auth/login", {
-        email,
-        password,
-      });
+      const loginResponse = await axios.post(
+        "http://localhost:5000/api/auth/login", 
+        {
+          email,
+          password,
+        },
+        { withCredentials: true } // Aseguramos que las cookies se envíen en la solicitud
+      );
       setToken(loginResponse.data.token);
       navigate("/"); // Redirigimos al home después de iniciar sesión
     } catch (error) {

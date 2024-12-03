@@ -13,15 +13,24 @@ const Login = ({ setToken }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/login", {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/auth/login`, // Usar la URL de la variable de entorno
+        {
+          email,
+          password,
+        },
+        { withCredentials: true } // Agregar esta línea para enviar cookies
+      );
       setToken(response.data.token); // Guardamos el token
       alert("Login exitoso");
       navigate("/"); // Redirigimos al home
     } catch (error) {
-      setError(error.response ? error.response.data.message : "Error en la conexión");
+      setError(error.response 
+        ? error.response.data.message 
+        : error.request 
+        ? "No se pudo conectar con el servidor" 
+        : "Error desconocido"
+      );
     }
   };
 
