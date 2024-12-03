@@ -68,11 +68,10 @@ router.post("/login", async (req, res) => {
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
     // Enviar el token como una cookie segura (SameSite=None para CORS)
-    res.cookie("token", token, {
-      httpOnly: true, // No accesible desde JS
-      secure: process.env.NODE_ENV === "production", // Solo en HTTPS en producción
-      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // SameSite=None solo en producción
-      maxAge: 3600000, // 1 hora de expiración
+    res.cookie('token', token, {
+      httpOnly: true, // La cookie no será accesible por JavaScript
+      secure: process.env.NODE_ENV === 'production', // En producción, solo en HTTPS
+      maxAge: 3600000, // 1 hora
     });
 
     res.json({ message: "Autenticación exitosa", token }); // Enviar el token en la respuesta
