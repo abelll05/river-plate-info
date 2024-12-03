@@ -1,4 +1,3 @@
-// backend/server.js
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
@@ -17,26 +16,27 @@ connectDB();
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Configuración de CORS para permitir solicitudes desde el frontend
+// Configuración de CORS
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || "http://localhost:3000", // Cambia esto si usas otro puerto o dominio
+  origin: process.env.FRONTEND_URL || "http://localhost:3000",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  allowedHeaders: "Content-Type,Authorization", // Asegúrate de permitir los encabezados necesarios
-  credentials: true, // Esto es necesario para enviar cookies (token en la cookie)
+  allowedHeaders: "Content-Type,Authorization",
+  credentials: true,
 };
 
 app.use(cors(corsOptions)); // Usamos corsOptions aquí
 
 // Middlewares
-app.use(express.json()); // Parsear JSON en el cuerpo de las solicitudes
-app.use(cookieParser()); // Manejo de cookies
-app.use(morgan("dev")); // Registrar las solicitudes en consola (útil para desarrollo)
+app.use(express.json());
+app.use(cookieParser());
 
-// Conexión a la base de datos (verifica que la conexión esté bien configurada)
-connectDB();
+// Solo loggers en desarrollo
+if (process.env.NODE_ENV !== "production") {
+  app.use(morgan("dev"));
+}
 
 // Rutas de autenticación
-app.use("/api/auth", authRoutes); // Ruta para el registro y login de usuarios
+app.use("/api/auth", authRoutes);
 
 // Ruta principal
 app.get("/", (req, res) => {
@@ -44,9 +44,8 @@ app.get("/", (req, res) => {
 });
 
 // Ruta para obtener la lista de jugadores
-app.get("/api/players", async (req, res) => {
-  try {
-    const players = [
+app.get("/api/players", (req, res) => {
+  const players = [
       // Arqueros
       { name: "Franco Armani", position: "Arquero" },
       { name: "Jeremías Ledesma", position: "Arquero" },
@@ -89,18 +88,15 @@ app.get("/api/players", async (req, res) => {
       { name: "Tomas Nasif", position: "Delantero" },
     ];
 
-    res.json(players); // Enviar la lista de jugadores como respuesta
-  } catch (error) {
-    res.status(500).json({ message: "Error al obtener los jugadores", error: error.message });
-  }
-});
-
-// Manejo de rutas inexistentes
-app.use((req, res) => {
-  res.status(404).json({ message: "Ruta no encontrada" });
-});
-
-// Iniciar el servidor
-app.listen(port, () => {
-  console.log(`Servidor backend corriendo en http://localhost:${port}`);
-});
+    res.json(players);
+  });
+  
+  // Manejo de rutas inexistentes
+  app.use((req, res) => {
+    res.status(404).json({ message: "Ruta no encontrada" });
+  });
+  
+  // Iniciar el servidor
+  app.listen(port, () => {
+    console.log(`Servidor backend corriendo en el puerto ${port}`);
+  });
