@@ -14,7 +14,6 @@ connectDB();
 
 // Inicializar la app
 const app = express();
-const port = process.env.PORT || 5000;
 
 // Middlewares
 app.use(express.json()); // Parsear JSON en el cuerpo de las solicitudes
@@ -22,7 +21,7 @@ app.use(cors()); // Habilitar CORS para evitar problemas con solicitudes cross-o
 app.use(morgan("dev")); // Registrar las solicitudes en consola (útil para desarrollo)
 
 // Rutas de autenticación
-app.use("/api/auth", authRoutes); // Ruta para el registro y login de usuarios
+app.use("/api/auth", authRoutes);
 
 // Rutas principales
 app.get("/", (req, res) => {
@@ -74,8 +73,7 @@ app.get("/api/players", async (req, res) => {
       { name: "Ian Suriabre", position: "Delantero" },
       { name: "Tomas Nasif", position: "Delantero" },
     ];
-    
-    res.json(players); // Enviar la lista de jugadores como respuesta
+    res.json(players);
   } catch (error) {
     res.status(500).json({ message: "Error al obtener los jugadores", error: error.message });
   }
@@ -86,7 +84,5 @@ app.use((req, res) => {
   res.status(404).json({ message: "Ruta no encontrada" });
 });
 
-// Iniciar el servidor
-app.listen(port, () => {
-  console.log(`Servidor backend corriendo en http://localhost:${port}`);
-});
+// Exportar la aplicación (necesario para Vercel)
+module.exports = app;
