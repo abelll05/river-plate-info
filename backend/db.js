@@ -1,18 +1,27 @@
 const mongoose = require("mongoose");
 
 const connectDB = async () => {
-  try {
-    // Conexión a MongoDB utilizando la URI del archivo .env
-    const conn = await mongoose.connect(process.env.MONGO_URI);
+  const mongoURI = process.env.MONGO_URI;
 
-    // Mensaje de éxito si la conexión es exitosa
+  // Validar que la URI esté definida
+  if (!mongoURI) {
+    console.error("Error: MONGO_URI no está definido en las variables de entorno.");
+    process.exit(1); // Finaliza el proceso con error
+  }
+
+  try {
+    // Conexión a MongoDB utilizando la URI
+    const conn = await mongoose.connect(mongoURI, {
+      // Opciones opcionales, aunque no estrictamente necesarias en Mongoose 6+
+      autoIndex: true, // Crear automáticamente índices en MongoDB
+      serverSelectionTimeoutMS: 5000, // Tiempo máximo para seleccionar un servidor
+    });
+
     console.log(`MongoDB conectado: ${conn.connection.host}`);
   } catch (error) {
-    // Mensaje de error si ocurre un problema
+    // Manejo de errores con mensaje detallado
     console.error(`Error conectando a MongoDB: ${error.message}`);
-
-    // Finalizar el proceso con error
-    process.exit(1);
+    process.exit(1); // Finaliza el proceso con error
   }
 };
 
