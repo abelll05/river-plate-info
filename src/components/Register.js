@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // Importamos useNavigate
+import { useNavigate, Link } from "react-router-dom"; // Importa Link aquí
 import "./Auth.css"; // Importamos el archivo CSS
 
-const Register = ({ setToken }) => {
+const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,37 +13,42 @@ const Register = ({ setToken }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(
-        "http://localhost:5000/api/auth/register", 
-        {
-          username,
-          email,
-          password,
-        },
-        { withCredentials: true } // Aseguramos que las cookies se envíen en la solicitud
+      // Primero, registra al usuario
+      const registerResponse = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/auth/register`, // Usar la URL de la variable de entorno
+        { username, email, password }
       );
       alert("Registro exitoso");
 
-      // Después del registro, hacemos login automáticamente
+      // Luego, haz el login automáticamente con los datos del registro
       const loginResponse = await axios.post(
-        "http://localhost:5000/api/auth/login", 
-        {
-          email,
-          password,
-        },
-        { withCredentials: true } // Aseguramos que las cookies se envíen en la solicitud
+        `${process.env.REACT_APP_API_URL}/api/auth/login`, 
+        { email, password },
+        { withCredentials: true } // Para manejar las cookies de sesión
       );
-      setToken(loginResponse.data.token);
-      navigate("/"); // Redirigimos al home después de iniciar sesión
+
+      // Si el login es exitoso, redirige a la página principal
+      alert("Login exitoso");
+      navigate("/"); // Redirige a la página de inicio o home
     } catch (error) {
-      setError(error.response ? error.response.data.message : "Error en la conexión");
+      // Manejo de errores
+      if (error.response) {
+        // Error recibido desde el backend
+        setError(error.response.data.message || "Error al registrar o iniciar sesión");
+      } else if (error.request) {
+        // Error al hacer la solicitud (backend no responde)
+        setError("No se pudo conectar con el servidor");
+      } else {
+        // Otro tipo de error
+        setError("Error desconocido");
+      }
     }
   };
 
   return (
     <div className="auth-container">
       <div className="auth-box shadow">
-        <h1 className="auth-title">Registro</h1>
+        <h1 className="auth-title">Registrarse</h1>
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="auth-input-group">
             <label>Nombre de usuario</label>
@@ -82,9 +87,9 @@ const Register = ({ setToken }) => {
         </form>
         <p className="auth-footer">
           ¿Ya tienes cuenta?{" "}
-          <a href="/login" className="auth-link-red">
-            Inicia sesión
-          </a>
+          <Link to="/login" className="auth-link-red">
+            Inicia sesión aquí
+          </Link>
         </p>
       </div>
     </div>

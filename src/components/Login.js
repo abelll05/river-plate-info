@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from 'react-router-dom';
 import "./Auth.css"; // Importamos el archivo CSS
 
 const Login = ({ setToken }) => {
@@ -15,22 +14,21 @@ const Login = ({ setToken }) => {
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/auth/login`, // Usar la URL de la variable de entorno
-        {
-          email,
-          password,
-        },
+        { email, password },
         { withCredentials: true } // Agregar esta línea para enviar cookies
       );
       setToken(response.data.token); // Guardamos el token
       alert("Login exitoso");
       navigate("/"); // Redirigimos al home
     } catch (error) {
-      setError(error.response 
-        ? error.response.data.message 
-        : error.request 
-        ? "No se pudo conectar con el servidor" 
-        : "Error desconocido"
-      );
+      // Mejora en el manejo de errores
+      if (error.response) {
+        setError(error.response.data.message || "Error en el servidor");
+      } else if (error.request) {
+        setError("No se pudo conectar con el servidor");
+      } else {
+        setError("Error desconocido");
+      }
     }
   };
 

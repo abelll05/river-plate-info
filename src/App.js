@@ -39,15 +39,21 @@ function App() {
   };
 
   useEffect(() => {
-    // Verificar si el token está expirado
-    if (token && isTokenExpired(token)) {
+    // Verifica si el token está en localStorage
+    const storedToken = localStorage.getItem("token");
+  
+    if (storedToken && isTokenExpired(storedToken)) {
+      // Si el token está expirado, lo eliminamos
       localStorage.removeItem("token");
-      setToken(""); // Limpiar el token
-      navigate("/login"); // Redirigir al login
-    } else if (!token && window.location.pathname !== "/login" && window.location.pathname !== "/register") {
-      navigate("/login"); // Redirigir al login si no hay token y no estamos en las páginas de login o registro
+      setToken(null); // Limpiamos el estado del token
+      navigate("/login");
+    } else if (!storedToken && window.location.pathname !== "/login" && window.location.pathname !== "/register") {
+      // Si no hay token y no estamos en login/register, redirige al login
+      navigate("/login");
+    } else {
+      setToken(storedToken); // Si el token existe, actualiza el estado
     }
-  }, [token, navigate]);
+  }, [navigate]);
 
   return (
     <div>
@@ -63,21 +69,13 @@ function App() {
 
         {/* Rutas protegidas */}
         <Route
-          path="/history"
-          element={
-            <PrivateRoute>
-              <History />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/team"
-          element={
-            <PrivateRoute>
-              <Team />
-            </PrivateRoute>
-          }
-        />
+  path="/history"
+  element={<PrivateRoute token={token}><History /></PrivateRoute>}
+/>
+<Route
+  path="/team"
+  element={<PrivateRoute token={token}><Team /></PrivateRoute>}
+/>
 
         {/* Ruta de Logout */}
         <Route path="/logout" element={<Logout />} />
