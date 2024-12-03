@@ -17,6 +17,14 @@ connectDB();
 const app = express();
 const port = process.env.PORT || 5000;
 
+// Middleware para configurar cookies en producción
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV === "production") {
+    res.header("Set-Cookie", "SameSite=None; Secure");
+  }
+  next();
+});
+
 // Middlewares
 app.use(express.json()); // Parsear JSON en el cuerpo de las solicitudes
 app.use(cookieParser()); // Manejo de cookies
@@ -28,14 +36,6 @@ app.use(
     credentials: true, // Permitir el envío de cookies en solicitudes cruzadas
   })
 );
-
-// Middleware para configurar cookies en producción
-app.use((req, res, next) => {
-  if (process.env.NODE_ENV === "production") {
-    res.header("Set-Cookie", "SameSite=None; Secure"); // Para producción
-  }
-  next();
-});
 
 app.use(morgan("dev")); // Registrar las solicitudes en consola (útil para desarrollo)
 
