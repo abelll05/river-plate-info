@@ -3,6 +3,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const morgan = require("morgan");
+const cookieParser = require("cookie-parser");
 const connectDB = require("./db"); // Conexión a la base de datos MongoDB
 const authRoutes = require("./routes/auth"); // Rutas de autenticación
 
@@ -14,16 +15,23 @@ connectDB();
 
 // Inicializar la app
 const app = express();
+const port = process.env.PORT || 5000;
 
 // Middlewares
 app.use(express.json()); // Parsear JSON en el cuerpo de las solicitudes
-app.use(cors()); // Habilitar CORS para evitar problemas con solicitudes cross-origin
+app.use(cookieParser()); // Manejo de cookies
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || "http://localhost:3000", // Cambia según tu dominio frontend
+    credentials: true, // Permitir envío de cookies en solicitudes cruzadas
+  })
+);
 app.use(morgan("dev")); // Registrar las solicitudes en consola (útil para desarrollo)
 
 // Rutas de autenticación
-app.use("/api/auth", authRoutes);
+app.use("/api/auth", authRoutes); // Ruta para el registro y login de usuarios
 
-// Rutas principales
+// Ruta principal
 app.get("/", (req, res) => {
   res.send("Bienvenido a la API de River Plate!");
 });
@@ -73,7 +81,8 @@ app.get("/api/players", async (req, res) => {
       { name: "Ian Suriabre", position: "Delantero" },
       { name: "Tomas Nasif", position: "Delantero" },
     ];
-    res.json(players);
+
+    res.json(players); // Enviar la lista de jugadores como respuesta
   } catch (error) {
     res.status(500).json({ message: "Error al obtener los jugadores", error: error.message });
   }
@@ -84,5 +93,7 @@ app.use((req, res) => {
   res.status(404).json({ message: "Ruta no encontrada" });
 });
 
-// Exportar la aplicación (necesario para Vercel)
-module.exports = app;
+// Iniciar el servidor
+app.listen(port, () => {
+  console.log(`Servidor backend corriendo en http://localhost:${port}`);
+});
