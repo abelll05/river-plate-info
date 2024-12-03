@@ -29,6 +29,14 @@ app.use(
   })
 );
 
+// Middleware para configurar cookies en producción
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV === "production") {
+    res.header("Set-Cookie", "SameSite=None; Secure"); // Para producción
+  }
+  next();
+});
+
 app.use(morgan("dev")); // Registrar las solicitudes en consola (útil para desarrollo)
 
 // Rutas de autenticación
