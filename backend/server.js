@@ -20,12 +20,15 @@ const port = process.env.PORT || 5000;
 // Middlewares
 app.use(express.json()); // Parsear JSON en el cuerpo de las solicitudes
 app.use(cookieParser()); // Manejo de cookies
+
+// Configuración de CORS para permitir solicitudes desde el frontend
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000", // Cambia según tu dominio frontend
-    credentials: true, // Permitir envío de cookies en solicitudes cruzadas
+    origin: process.env.FRONTEND_URL || "http://localhost:3000", // Cambia esto según tu entorno de frontend
+    credentials: true, // Permitir el envío de cookies en solicitudes cruzadas
   })
 );
+
 app.use(morgan("dev")); // Registrar las solicitudes en consola (útil para desarrollo)
 
 // Rutas de autenticación
