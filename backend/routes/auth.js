@@ -58,7 +58,15 @@ router.post("/login", async (req, res) => {
     // Generar el token de JWT
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-    res.json({ token });
+    // Enviar el token como una cookie segura (SameSite=None para CORS)
+    res.cookie("token", token, {
+      httpOnly: true, // No accesible desde JS
+      secure: process.env.NODE_ENV === "production", // Solo en HTTPS en producción
+      sameSite: "None", // Permitir solicitudes CORS
+      maxAge: 3600000, // 1 hora de expiración
+    });
+
+    res.json({ message: "Autenticación exitosa" });
   } catch (error) {
     res.status(500).json({ message: "Error al iniciar sesión", error: error.message });
   }
