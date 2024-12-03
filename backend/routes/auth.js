@@ -68,11 +68,12 @@ router.post("/login", async (req, res) => {
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
     // Enviar el token como una cookie segura (SameSite=None para CORS)
-    res.cookie('token', token, {
-      httpOnly: true, // La cookie no será accesible por JavaScript
-      secure: process.env.NODE_ENV === 'production', // En producción, solo en HTTPS
-      maxAge: 3600000, // 1 hora
+    res.cookie("__vercel_live_token", token, {
+      httpOnly: true,  // Asegura que la cookie solo sea accesible para el servidor
+      secure: true,    // Solo se enviará sobre HTTPS
+      sameSite: "None", // Permite que la cookie se envíe en solicitudes cruzadas
     });
+    
 
     res.json({ message: "Autenticación exitosa", token }); // Enviar el token en la respuesta
   } catch (error) {
