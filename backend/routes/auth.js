@@ -69,9 +69,9 @@ router.post("/login", async (req, res) => {
 
     // Enviar el token como una cookie segura (SameSite=None para CORS)
     res.cookie("__vercel_live_token", token, {
-      httpOnly: true,  // Asegura que la cookie solo sea accesible para el servidor
-      secure: true,    // Solo se enviará sobre HTTPS
-      sameSite: "None", // Permite que la cookie se envíe en solicitudes cruzadas
+      httpOnly: true,  // No accesible desde JavaScript
+      secure: process.env.NODE_ENV === "production",  // Sólo en producción usar HTTPS
+      sameSite: "None",  // Necesario para cookies entre sitios (cross-site)
     });
     
 

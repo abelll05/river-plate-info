@@ -18,10 +18,12 @@ const port = process.env.PORT || 5000;
 
 // Configuración de CORS
 const corsOptions = {
-  origin: process.env.FRONTEND_URL, // URL del frontend (https://river-plate-info.vercel.app)
-  credentials: true, // Permitir cookies y cabeceras
+  origin: process.env.FRONTEND_URL, // Asegúrate de que esta URL esté correctamente configurada
+  credentials: true,  // Permitir el envío de cookies
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
 };
-app.use(cors(corsOptions)); // Usamos corsOptions aquí
+
+app.use(cors(corsOptions));  // Usar corsOptions aquí
 
 // Middlewares
 app.use(express.json()); // Para parsear el cuerpo de la solicitud como JSON
