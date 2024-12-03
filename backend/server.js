@@ -18,12 +18,9 @@ const port = process.env.PORT || 5000;
 
 // Configuración de CORS
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || "http://localhost:3000",
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  allowedHeaders: "Content-Type,Authorization",
-  credentials: true,
+  origin: process.env.FRONTEND_URL, // URL del frontend (https://river-plate-info.vercel.app)
+  credentials: true, // Permitir cookies y cabeceras
 };
-
 app.use(cors(corsOptions)); // Usamos corsOptions aquí
 
 // Middlewares
@@ -88,15 +85,15 @@ app.get("/api/players", (req, res) => {
       { name: "Tomas Nasif", position: "Delantero" },
     ];
 
-    res.json(players);
-  });
-  
-  // Manejo de rutas inexistentes
-  app.use((req, res) => {
-    res.status(404).json({ message: "Ruta no encontrada" });
-  });
-  
-  // Iniciar el servidor
-  app.listen(port, () => {
-    console.log(`Servidor backend corriendo en el puerto ${port}`);
-  });
+  res.json(players);
+});
+
+// Manejo de rutas inexistentes
+app.use((req, res) => {
+  res.status(404).json({ message: "Ruta no encontrada" });
+});
+
+// Iniciar el servidor
+app.listen(port, () => {
+  console.log(`Servidor backend corriendo en el puerto ${port}`);
+});

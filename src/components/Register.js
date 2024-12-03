@@ -15,21 +15,24 @@ const Register = () => {
     try {
       // Primero, registra al usuario
       const registerResponse = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/auth/register`, // Usar la URL de la variable de entorno
+        `${process.env.REACT_APP_API_URL}/api/auth/register`, // URL de la API
         { username, email, password }
       );
       alert("Registro exitoso");
 
       // Luego, haz el login automáticamente con los datos del registro
       const loginResponse = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/auth/login`, 
+        `${process.env.REACT_APP_API_URL}/api/auth/login`,
         { email, password },
         { withCredentials: true } // Para manejar las cookies de sesión
       );
 
-      // Si el login es exitoso, redirige a la página principal
-      alert("Login exitoso");
-      navigate("/"); // Redirige a la página de inicio o home
+      if (loginResponse.data.token) {
+        alert("Login exitoso");
+        navigate("/"); // Redirige a la página de inicio o home
+      } else {
+        setError("Error al iniciar sesión automáticamente");
+      }
     } catch (error) {
       // Manejo de errores
       if (error.response) {
